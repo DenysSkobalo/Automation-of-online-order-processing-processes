@@ -78,3 +78,32 @@ def check_order_status(orders):
     for item in order["items"]:
         print(f" - {item['dish']['name']} x{item['quantity']} ({item['dish']['price']} EUR за одиницю)")
     print(f"Загальна сума: {order['total_price']} EUR")
+
+
+def cancel_order(orders):
+    print("\n=== Скасування замовлення ===")
+    
+    order_id = input("Введіть номер замовлення для скасування: ").strip()
+    
+    try:
+        order_id = int(order_id)
+    except ValueError:
+        print("Помилка: Введіть коректний номер замовлення.")
+        return
+    
+    order = next((o for o in orders if o["id"] == order_id), None)
+    if not order:
+        print(f"Замовлення з номером {order_id} не знайдено.")
+        return
+    
+    current_time = datetime.datetime.now()
+    order_time = order["timestamp"]
+    time_elapsed = (current_time - order_time).total_seconds()
+    
+    if order["status"] != "в підготовці":
+        print(f"Замовлення з номером {order_id} не можна скасувати, оскільки його статус: '{order['status']}'.")
+    elif time_elapsed <= 30:
+        print(f"Замовлення з номером {order_id} не можна скасувати, оскільки з часу створення минуло лише {time_elapsed:.1f} секунд.")
+    else:
+        order["status"] = "скасовано"
+        print(f"Замовлення з номером {order_id} успішно скасовано.")

@@ -27,7 +27,8 @@ def buyer_interface():
         print("1. Показати меню ресторану")
         print("2. Зробити замовлення")
         print("3. Перевірити статус замовлення")
-        print("4. Повернутися до вибору ролі")
+        print("4. Скасувати замовлення")
+        print("5. Повернутися до вибору ролі")
 
         choice = input("Виберіть опцію (1-4): ").strip()
 
@@ -38,6 +39,8 @@ def buyer_interface():
         elif choice == "3":
             orders.check_order_status(orders.orders)  
         elif choice == "4":
+            orders.cancel_order(orders.orders)
+        elif choice == "5":
             break
         else:
             print("Невірний вибір. Спробуйте ще раз.")
