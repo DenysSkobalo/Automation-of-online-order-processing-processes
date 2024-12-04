@@ -1,73 +1,98 @@
-import menu
-import orders
+from data import menu_items
+from orders import OrderSystem
+from menu import Menu
 
-def show_role_menu():
+order_system = OrderSystem(menu_items)
+menu_system = Menu(menu_items)
+
+
+class RoleInterface:
+    @staticmethod
+    def show_role_menu():
+        """Main role selection menu."""
         while True:
-            print("\n==== Вибір ролі ====")
-            print("1. User")
+            print("\n==== Role Selection ====")
+            print("1. Client")
             print("2. Restaurateur")
             print("3. Exit")
 
-            choice = input("Виберіть роль (1-3): ").strip()
+            choice = input("Select a role (1-3): ").strip()
+            role_actions = {
+                "1": BuyerInterface.show_menu,
+                "2": RestaurateurInterface.show_menu,
+                "3": RoleInterface.exit_program,
+            }
 
-            if choice == "1":
-                buyer_interface()
-            elif choice == "2":
-                restaurateur_interface()  
-            elif choice == "3":
-                print("Дякую за користування системою!")
-                break
+            action = role_actions.get(choice)
+            if action:
+                action()
             else:
-                print("Невірний вибір. Спробуйте ще раз.")
+                print("Invalid choice. Please try again.")
+
+    @staticmethod
+    def exit_program():
+        """Exit the program."""
+        print("Thank you for using the system!")
+        exit()
 
 
-def buyer_interface():
-     while True:
-        print("\n===== Покупець: Меню операцій =====")
-        print("1. Показати меню ресторану")
-        print("2. Зробити замовлення")
-        print("3. Перевірити статус замовлення")
-        print("4. Скасувати замовлення")
-        print("5. Повернутися до вибору ролі")
+class BuyerInterface:
+    @staticmethod
+    def show_menu():
+        """Menu for the customer."""
+        while True:
+            print("\n===== Client: Operations Menu =====")
+            print("1. Show restaurant menu")
+            print("2. Make an order")
+            print("3. Check order status")
+            print("4. Cancel order")
+            print("5. Search dish by name")
+            print("6. Return to role selection")
 
-        choice = input("Виберіть опцію (1-4): ").strip()
+            choice = input("Select an option (1-6): ").strip()
+            buyer_actions = {
+                "1": lambda: menu_system.display(),
+                "2": lambda: order_system.make_order(order_system.menu),
+                "3": lambda: order_system.check_order_status(),
+                "4": lambda: order_system.cancel_order(),
+                "5": lambda: menu_system.search_dish_by_name(),
+                "6": RoleInterface.show_role_menu,
+            }
 
-        if choice == "1":
-            menu.display_menu(menu.menu_items)  
-        elif choice == "2":
-            orders.make_order(menu.menu_items, orders.orders)  
-        elif choice == "3":
-            orders.check_order_status(orders.orders)  
-        elif choice == "4":
-            orders.cancel_order(orders.orders)
-        elif choice == "5":
-            break
-        else:
-            print("Невірний вибір. Спробуйте ще раз.")
-            
+            action = buyer_actions.get(choice)
+            if action:
+                action()
+            else:
+                print("Invalid choice. Please try again.")
 
-def restaurateur_interface():
-    while True:
-        print("\n===== Ресторатор: Меню операцій =====")
-        print("1. Показати меню ресторану")
-        print("2. Додати нову страву")
-        print("3. Редагувати страву")
-        print("4. Видалити страву")
-        print("5. Повернутися до вибору ролі")
 
-        choice = input("Виберіть опцію (1-5): ").strip()
+class RestaurateurInterface:
+    @staticmethod
+    def show_menu():
+        """Menu for the restaurateur."""
+        while True:
+            print("\n===== Restaurateur: Operations Menu =====")
+            print("1. Show restaurant menu")
+            print("2. Add a new dish")
+            print("3. Edit a dish")
+            print("4. Remove a dish")
+            print("5. Process an order")
+            print("6. Search dish by name")
+            print("7. Return to role selection")
 
-        if choice == "1":
-            menu.display_menu(menu.menu_items)  
-        elif choice == "2":
-            menu.add_dish(menu.menu_items)  
-        elif choice == "3":
-            menu.edit_dish(menu.menu_items)  
-        elif choice == "4":
-            menu.remove_dish(menu.menu_items)  
-        elif choice == "5":
-            break
-        else:
-            print("Невірний вибір. Спробуйте ще раз.")
+            choice = input("Select an option (1-7): ").strip()
+            restaurateur_actions = {
+                "1": lambda: menu_system.display(),
+                "2": lambda: menu_system.add_dish(),
+                "3": lambda: menu_system.edit_dish(),
+                "4": lambda: menu_system.remove_dish(),
+                "5": lambda: order_system.process_order(),
+                "6": lambda: menu_system.search_dish_by_name(),
+                "7": RoleInterface.show_role_menu,
+            }
 
-            
+            action = restaurateur_actions.get(choice)
+            if action:
+                action()
+            else:
+                print("Invalid choice. Please try again.")
