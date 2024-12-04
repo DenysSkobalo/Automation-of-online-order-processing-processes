@@ -32,7 +32,7 @@ def buyer_interface():
         choice = input("Виберіть опцію (1-4): ").strip()
 
         if choice == "1":
-            menu.display_menu()  
+            menu.display_menu(menu.menu_items)  
         elif choice == "2":
             orders.make_order()  
         elif choice == "3":
@@ -55,13 +55,13 @@ def restaurateur_interface():
         choice = input("Виберіть опцію (1-5): ").strip()
 
         if choice == "1":
-            menu.display_menu()  
+            menu.display_menu(menu.menu_items)  
         elif choice == "2":
-            menu.add_dish()  
+            menu.add_dish(menu.menu_items)  
         elif choice == "3":
-            menu.edit_dish()  
+            menu.edit_dish(menu.menu_items)  
         elif choice == "4":
-            menu.remove_dish()  
+            menu.remove_dish(menu.menu_items)  
         elif choice == "5":
             break
         else:
