@@ -34,9 +34,9 @@ def buyer_interface():
         if choice == "1":
             menu.display_menu(menu.menu_items)  
         elif choice == "2":
-            orders.make_order()  
+            orders.make_order(menu.menu_items, orders.orders)  
         elif choice == "3":
-            orders.check_order_status()  
+            orders.check_order_status(orders.orders)  
         elif choice == "4":
             break
         else:
