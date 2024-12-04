@@ -1,5 +1,5 @@
 from collections import defaultdict
-
+import ui
 class Node:
     def __init__(self, key, dish):
         """Initialization of a tree node with a key and a dish."""
@@ -73,24 +73,31 @@ class Menu:
         self.menu_items.update(data)
         for dish_id, dish in data.items():
             self.bst.insert(dish_id, dish)
-        print("\nData successfully loaded!")
+        ui.print_success("\nData successfully loaded!")
 
     def display(self):
         """Display the entire menu."""
         if not self.menu_items:
-            print("\nThe menu is empty.")
+            ui.print_error("\nThe menu is empty.")
             return
 
-        print("\n=== Restaurant Menu ===")
+        total_steps = 100
+        print("\nLoading...")
+        ui.progress_bar(range(total_steps), total_steps, prefix="Finish:")
+
+        print()
+        ui.print_line(90)
+        ui.print_text_centered("=== Restaurant Menu ===")
+        print(f"\n{'ID':<5} {'Name':<30} {'Price (EUR)':<15} {'Category':<20} {'Allergens':<30}")
+        ui.print_line(90)
+        
         for dish_id, dish in self.menu_items.items():
-            print(f"ID: {dish_id} | Name: {dish['name']} | Price: {dish['price']} EUR")
-            print(f"   Category: {dish['category']} | Allergens: {', '.join(dish['allergens'])}")
-            print(f"   Description: {dish['description']}")
-            print("-" * 40)
+            print(f"{dish_id:<5} {dish['name']:<30} {dish['price']:<15} {dish['category']:<20} {', '.join(dish['allergens']):<30}")
+            ui.print_line(90)
 
     def add_dish(self):
         """Adding a new dish to the menu."""
-        name = input("Enter the name of the dish: ").strip()
+        name = ui.get_dish_name()
         price = float(input("Enter the price of the dish (EUR): ").strip())
         category = input("Enter the category of the dish: ").strip()
         allergens = input("List allergens separated by commas (if any): ").strip().split(",")
@@ -108,11 +115,20 @@ class Menu:
 
         self.menu_items[new_id] = new_dish
         self.bst.insert(new_id, new_dish)
-        print(f"\nDish '{name}' successfully added to the menu!")
+        total_steps = 100
+        print("Storage of th dish(es)...")
+        ui.progress_bar(range(total_steps), total_steps, prefix="Finish:")
+
+        ui.print_success(f"\nDish(es) '{name}' successfully added to the menu!")
 
     def edit_dish(self):
         """Edit an existing dish."""
-        dish_id = int(input("Enter the ID of the dish you want to edit: ").strip())
+        dish_id = int(input("\nEnter the ID of the dish you want to edit: ").strip())
+
+        total_steps = 100
+        print("Loading...")
+        ui.progress_bar(range(total_steps), total_steps, prefix="Finish:")
+
 
         if dish_id in self.menu_items:
             dish = self.menu_items[dish_id]
@@ -134,23 +150,34 @@ class Menu:
             if description:
                 dish["description"] = description
 
-            print(f"\nDish with ID {dish_id} successfully updated!")
+            total_steps = 100
+            print("Updating...")
+            ui.progress_bar(range(total_steps), total_steps, prefix="Finish:")
+            ui.print_success(f"\nDish with ID {dish_id} successfully updated!")
         else:
-            print(f"\nDish with ID {dish_id} not found.")
+            ui.print_error(f"\nDish with ID {dish_id} not found.")
 
     def remove_dish(self):
         """Remove a dish from the menu."""
-        dish_id = int(input("Enter the ID of the dish you want to remove: ").strip())
+        dish_id = int(input("\nEnter the ID of the dish you want to remove: ").strip())
+
+        total_steps = 100
+        print("Searching...")
+        ui.progress_bar(range(total_steps), total_steps, prefix="Finish:")
 
         if dish_id in self.menu_items:
             dish = self.menu_items.pop(dish_id)
-            print(f"\nDish '{dish['name']}' (ID: {dish_id}) successfully removed!")
+            ui.print_success(f"\nDish '{dish['name']}' (ID: {dish_id}) successfully removed!")
         else:
-            print(f"\nDish with ID {dish_id} not found.")
+            ui.print_error(f"\nDish with ID {dish_id} not found.")
 
     def search_dish_by_name(self):
         """Search for a dish by name."""
-        search_term = input("Enter the name of the dish to search for: ").strip().lower()
+        search_term = ui.get_dish_name().lower()
+
+        total_steps = 100
+        print("Searching...")
+        ui.progress_bar(range(total_steps), total_steps, prefix="Finish:")
 
         found_dishes = [
             (dish_id, dish) for dish_id, dish in self.menu_items.items()
@@ -165,4 +192,4 @@ class Menu:
                 print(f"Description: {dish['description']}")
                 print("-" * 40)
         else:
-            print(f"Dish with the name '{search_term}' not found.")
+            ui.print_error(f"Dish with the name '{search_term}' not found.")

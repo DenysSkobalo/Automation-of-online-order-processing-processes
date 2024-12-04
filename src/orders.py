@@ -1,5 +1,6 @@
 import datetime
 from collections import deque
+import ui
 
 
 class OrderSystem:
@@ -12,15 +13,19 @@ class OrderSystem:
     def display_menu(menu):
         """Displays the restaurant's menu."""
         if not menu:
-            print("\nThe menu is empty.")
+            ui.print_error("\nThe menu is empty.")
             return
 
-        print("\n=== Restaurant Menu ===")
+        print()
+        ui.print_line(90)
+        ui.print_text_centered("=== Restaurant Menu ===")
+        print(f"\n{'ID':<5} {'Name':<30} {'Price (EUR)':<15} {'Category':<20} {'Allergens':<30}")
+        ui.print_line(90)
+        
         for dish_id, dish in menu.items():
-            print(f"ID: {dish_id} | Name: {dish['name']} | Price: {dish['price']} EUR")
-            print(f"   Category: {dish['category']} | Allergens: {', '.join(dish['allergens'])}")
-            print(f"   Description: {dish['description']}")
-            print("-" * 40)
+            print(f"{dish_id:<5} {dish['name']:<30} {dish['price']:<15} {dish['category']:<20} {', '.join(dish['allergens']):<30}")
+            ui.print_line(90)
+        
 
     def make_order(self, menu):
         """Creates a new order."""
@@ -39,6 +44,9 @@ class OrderSystem:
                 quantity = self.get_positive_int(f"Enter the quantity for '{dish['name']}': ")
                 order_items.append({"dish": dish, "quantity": quantity})
                 print(f"Dish '{dish['name']}' added to the order (Quantity: {quantity}).")
+                total_steps = 30
+                print("\Storage of dishes to order...")
+                ui.progress_bar(range(total_steps), total_steps, prefix="Finish:")
             else:
                 print("Invalid dish ID. Please try again.")
 
@@ -69,7 +77,8 @@ class OrderSystem:
 
     def check_order_status(self):
         """Displays the order status by its number."""
-        order_id = self.get_positive_int("Enter the order number: ")
+        order_id = self.get_positive_int("\nEnter the order number: ")
+
 
         if order_id in self.orders_dict:
             order = self.orders_dict[order_id]

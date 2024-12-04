@@ -1,6 +1,7 @@
 from data import menu_items
 from orders import OrderSystem
 from menu import Menu
+import ui
 
 order_system = OrderSystem(menu_items)
 menu_system = Menu(menu_items)
@@ -11,7 +12,7 @@ class RoleInterface:
     def show_role_menu():
         """Main role selection menu."""
         while True:
-            print("\n==== Role Selection ====")
+            ui.print_centered("==== Role Selection ====")
             print("1. Client")
             print("2. Restaurateur")
             print("3. Exit")
@@ -23,16 +24,19 @@ class RoleInterface:
                 "3": RoleInterface.exit_program,
             }
 
+            ui.loading_animation()
+
             action = role_actions.get(choice)
             if action:
                 action()
             else:
-                print("Invalid choice. Please try again.")
+                ui.print_error("Invalid choice. Please try again.")
 
     @staticmethod
     def exit_program():
         """Exit the program."""
-        print("Thank you for using the system!")
+        ui.loading_animation()
+        print("\nThank you for using the system!")
         exit()
 
 
@@ -41,7 +45,7 @@ class BuyerInterface:
     def show_menu():
         """Menu for the customer."""
         while True:
-            print("\n===== Client: Operations Menu =====")
+            ui.print_centered("===== Client: Operations Menu =====")
             print("1. Show restaurant menu")
             print("2. Make an order")
             print("3. Check order status")
@@ -59,19 +63,20 @@ class BuyerInterface:
                 "6": RoleInterface.show_role_menu,
             }
 
+            ui.loading_animation()
+
             action = buyer_actions.get(choice)
             if action:
                 action()
             else:
-                print("Invalid choice. Please try again.")
-
+                ui.print_error("Invalid choice. Please try again.")
 
 class RestaurateurInterface:
     @staticmethod
     def show_menu():
         """Menu for the restaurateur."""
         while True:
-            print("\n===== Restaurateur: Operations Menu =====")
+            ui.print_centered("===== Restaurateur: Operations Menu =====")
             print("1. Show restaurant menu")
             print("2. Add a new dish")
             print("3. Edit a dish")
@@ -90,9 +95,11 @@ class RestaurateurInterface:
                 "6": lambda: menu_system.search_dish_by_name(),
                 "7": RoleInterface.show_role_menu,
             }
-
+            
+            ui.loading_animation()
+            
             action = restaurateur_actions.get(choice)
             if action:
                 action()
             else:
-                print("Invalid choice. Please try again.")
+                ui.print_error("Invalid choice. Please try again.")
