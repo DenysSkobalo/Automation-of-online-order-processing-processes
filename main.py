@@ -8,9 +8,9 @@ from interface import RoleInterface
 from ui import print_header
 
 def main():
-    print_header("=== Система автоматизації роботи ресторану ===")
-    print("Ласкаво просимо до нашої system!")
-    print("Використовуйте CLI для взаємодії з системою.")
+    print_header("=== Restaurant automation system ===")
+    print("Welcome to our system!")
+    print("Use the CLI to interact with the system.")
 
     RoleInterface.show_role_menu()
 
